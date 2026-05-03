@@ -1,6 +1,8 @@
 require('dotenv').config()
 const express = require('express')
 const connectToDatabase = require('./database')
+const Blog = require('./model/blogModel')
+
 const app = express()
 app.use(express.json())
 
@@ -21,8 +23,27 @@ app.get("/",(req,res)=>{
 // })
 
 
-app.post("/blog",(req,res)=>{
-    console.log(req.body)
+app.post("/blog",async (req,res)=>{
+    // const description = req.body.description
+    // const title = req.body.title
+    // const subtitle = req.body.subtitle
+    // const image = req.body.image
+    // console.log(req.body)
+    const {title,description,image,subtitle} = req.body
+    if(!title || !description || !image || !subtitle){
+        return res.status(400).json({
+            message : "Please provide title, description,subtitle,image"
+        })
+    }
+    // console.log(title,description,image,subtitle)
+    await Blog.create({
+        title : title,
+        description : description,
+        subtitle : subtitle,
+        image : image
+    })
+    
+    // console.log(req.body)
     res.status(200).json({
         messaage : "Blog api hit successfully"
     })
