@@ -5,7 +5,8 @@ const Blog = require('./model/blogModel')
 
 const app = express()
 app.use(express.json())
-
+const {multer,storage} = require('./middleware/multerConfig')
+const upload = multer({storage : storage})
 
 connectToDatabase()
 
@@ -16,38 +17,16 @@ app.get("/",(req,res)=>{
         message:"This is home page"
     })
 })
-// app.get("/about",(req,res)=>{
-//     res.json({
-//         message:"This is about page"
-//     })
-// })
 
-
-app.post("/blog",async (req,res)=>{
-    // const description = req.body.description
-    // const title = req.body.title
-    // const subtitle = req.body.subtitle
-    // const image = req.body.image
-    // console.log(req.body)
-    const {title,description,image,subtitle} = req.body
-    if(!title || !description || !image || !subtitle){
-        return res.status(400).json({
-            message : "Please provide title, description,subtitle,image"
-        })
-    }
-    // console.log(title,description,image,subtitle)
-    await Blog.create({
-        title : title,
-        description : description,
-        subtitle : subtitle,
-        image : image
-    })
     
     // console.log(req.body)
+    app.post("/blog",upload.single('image'),(req,res)=>{
+        console.log(req.body)
     res.status(200).json({
         messaage : "Blog api hit successfully"
     })
 })
+
 
 
 
@@ -58,5 +37,3 @@ app.listen(process.env.PORT,()=>{
 
 
 
-//mongodb+srv://Bibekchaudhary:<db_password>@cluster0.edebov8.mongodb.net/?appName=Cluster0
-//mongodb+srv://Bibekchaudhary:<db_password>@cluster0.edebov8.mongodb.net/?appName=Cluster0
