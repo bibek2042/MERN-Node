@@ -7,6 +7,7 @@ const app = express()
 app.use(express.json())
 const {multer,storage} = require('./middleware/multerConfig')
 const upload = multer({storage : storage})
+const fs = require('fs') // fs is a file system
 
 connectToDatabase()
 
@@ -66,6 +67,13 @@ app.get("/blog/:id",async (req,res)=>{
 app.delete("/blog/:id",async (req,res)=>{
     const id = req.params.id 
     await Blog.findByIdAndDelete(id)
+    fs.unlink('storage/Bibek-My first logo.png',(err)=>{
+        if(err){
+            console.log(err)
+        }else{
+            console.log("File deleted successfully")
+        }
+    })
     res.status(200).json({
         message : 'Blog deleted successfully'
     })
