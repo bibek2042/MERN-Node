@@ -26,7 +26,7 @@ connectToDatabase()
         const {title,subtitle,description} = req.body
          let filename;
          if(req.file){
-            filename = "https://mern-node-u9wv.onrender.com" + req.file.filename
+            filename = "https://mern-node-u9wv.onrender.com/" + req.file.filename
          }else{
             filename = "https://cdn.mos.cms.futurecdn.net/i26qpaxZhVC28XRTJWafQS-800-80.jpeg"
          }
