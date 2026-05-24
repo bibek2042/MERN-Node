@@ -8,7 +8,6 @@ app.use(express.json())
 const {multer,storage} = require('./middleware/multerConfig')
 const upload = multer({storage : storage})
 const fs = require('fs') // fs is a file system
-const { blog } = require('stream/consumers')
 const cors = require('cors')
 
 
@@ -77,7 +76,7 @@ app.get("/blog/:id",async (req,res)=>{
 })
 app.delete("/blog/:id",async (req,res)=>{
     const id = req.params.id 
-    const blog = await blog.findById(id)
+    const blog = await Blog.findById(id)
     const imageName = blog.image
 
     // fs.unlink('storage/' + imageName,(err)=>{
