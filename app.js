@@ -8,7 +8,7 @@ app.use(express.json())
 const {multer,storage} = require('./middleware/multerConfig')
 const upload = multer({storage : storage})
 const fs = require('fs') // fs is a file system
-const { blob } = require('stream/consumers')
+const { blog } = require('stream/consumers')
 const cors = require('cors')
 
 
