@@ -9,27 +9,37 @@ const {multer,storage} = require('./middleware/multerConfig')
 const upload = multer({storage : storage})
 const fs = require('fs') // fs is a file system
 const { blob } = require('stream/consumers')
+const cors = require('cors')
+
+
+app.use(cors(
+    {
+        origin : ["http://localhost:5173","https://mern-project1-react.vercel.app"]
+    }
+))
+
+
 
 connectToDatabase()
 
-
-
-app.get("/",(req,res)=>{
-    res.json({
-        message:"This is home page"
-    })
-})
-
-    
-    
-    app.post("/blog",upload.single('image'),async(req,res)=>{
+    app.post("/blog",upload.single('image'), async(req,res)=>{
         const {title,subtitle,description} = req.body
-        const filename = req.file.filename
-        if(!title || !subtitle || !description){
+         let filename;
+         if(req.file){
+            filename = "http://localhost:3000/" + req.file.filename
+         }else{
+            filename = "https://cdn.mos.cms.futurecdn.net/i26qpaxZhVC28XRTJWafQS-800-80.jpeg"
+         }
+         
+
+           if(!title || !subtitle || !description){
             return res.status(400).json({
                 message : "Please provide title, subtitle, description"
             })
         }
+
+
+
         await Blog.create({
             title : title,
             subtitle : subtitle,
@@ -90,7 +100,7 @@ app.patch('/blog/:id',upload.single('image') ,async(req,res)=>{
    let imageName;
 
     if(req.file){
-        imageName = req.file.filename
+        imageName = "http://localhost:3000/" + req.file.filename
         const blog = await Blog.findById(id)
     const oldImageName = blog.image
 
